@@ -8,12 +8,12 @@ import android.test.com.didemo.models.User
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.user_recyler_layout.view.*
 
-class UserAdapter : ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCallback) {
+class UserAdapter(val glide: RequestManager) : ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         return UserViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.user_recyler_layout, parent, false))
     }
@@ -29,8 +29,7 @@ class UserAdapter : ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCallba
             mView.userEmail.text = item?.email
             mView.userAge.text = "${item?.dob?.age} years old"
 
-            Glide.with(mView.context)
-                    .load(item?.picture?.large)
+            glide.load(item?.picture?.large)
                     .apply(RequestOptions().centerCrop())
                     .apply(RequestOptions().circleCrop())
                     .apply(RequestOptions().error(R.color.material_grey_300))
